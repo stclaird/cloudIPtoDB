@@ -8,11 +8,11 @@ import (
 )
 
 type cidrObject struct {
-	cidrDecimal    int
-	netIP          net.IP
-	bcastIP        net.IP
-	netIPDecimal   int
-	bcastIPDecimal int
+	CidrDecimal    int
+	NetIP          net.IP
+	BcastIP        net.IP
+	NetIPDecimal   int
+	BcastIPDecimal int
 }
 
 func ProcessCidr(cidrIn string) (cidrOut cidrObject, err error) {
@@ -24,10 +24,10 @@ func ProcessCidr(cidrIn string) (cidrOut cidrObject, err error) {
 		return cidrOut, err
 	}
 
-	cidrOut.bcastIP = netaddr.BroadcastAddr(ipnet)
-	cidrOut.netIP = netaddr.NetworkAddr(ipnet)
-	cidrOut.netIPDecimal = IPv4toDecimal(cidrOut.netIP)
-	cidrOut.bcastIPDecimal = IPv4toDecimal(cidrOut.bcastIP)
+	cidrOut.BcastIP = netaddr.BroadcastAddr(ipnet)
+	cidrOut.NetIP = netaddr.NetworkAddr(ipnet)
+	cidrOut.NetIPDecimal = IPv4toDecimal(cidrOut.NetIP)
+	cidrOut.BcastIPDecimal = IPv4toDecimal(cidrOut.BcastIP)
 
 	return cidrOut, nil
 }

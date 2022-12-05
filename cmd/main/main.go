@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github/stclaird/cloudIPtoDB/pkg/config"
+	"github/stclaird/cloudIPtoDB/pkg/ipfile"
 	"github/stclaird/cloudIPtoDB/pkg/ipnet"
 	"github/stclaird/cloudIPtoDB/pkg/models"
 
@@ -15,11 +16,11 @@ import (
 
 var confObj = config.NewConfig()
 
-func setup() *sql.DB{
+func setup() *sql.DB {
 
-    os.MkdirAll(confObj.Dbdir, 0755)
+	os.MkdirAll(confObj.Dbdir, 0755)
 	full_path := fmt.Sprintf("%s/%s", confObj.Dbdir, confObj.Dbfile)
-   	file, err := os.Create(full_path)
+	file, err := os.Create(full_path)
 
 	if err != nil {
 		log.Println("Os Create Error: ", err)
@@ -27,7 +28,7 @@ func setup() *sql.DB{
 
 	file.Close()
 
-	models.DB, _ = sql.Open("sqlite3", full_path )
+	models.DB, _ = sql.Open("sqlite3", full_path)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -41,17 +42,17 @@ func main() {
 
 	db := setup()
 
-	for _, ipfile := range confObj.Ipfiles {
+	for _, i := range confObj.Ipfiles {
 
-		ipfile.Download()
+		i.Download()
 
 		var jsonObj interface{}
 		var cidrs []string
 
-		if ipfile.Cloudplatform == "aws" {
-			jsonObj = ipfile.amazonAsJson(ipfile.DownloadFileName)
-			json := jsonObj.(AmazonWebServicesFile)
-			fmt.Printf("Found %v Cidrs from %s\n", len(json.Prefixes), ipfile.Cloudplatform)
+		if i.Cloudplatform == "aws" {
+			jsonObj = ipfile.AmazonAsJson(i.DownloadFileName)
+			json := jsonObj.(ipfile.AmazonWebServicesFile)
+			fmt.Printf("Found %v Cidrs from %s\n", len(json.Prefixes), i.Cloudplatform)
 			for _, val := range json.Prefixes {
 				exists := ipfile.Str_in_slice(val.IPPrefix, cidrs)
 				if exists == false {
@@ -60,10 +61,10 @@ func main() {
 			}
 		}
 
-		if ipfile.Cloudplatform == "google" {
-			jsonObj = ipfile.googleAsJson(ipfile.DownloadFileName)
-			json := jsonObj.(GoogleCloudFile)
-			fmt.Printf("Found %v Cidrs from %s\n", len(json.Prefixes), ipfile.Cloudplatform)
+		if i.Cloudplatform == "google" {
+			jsonObj = ipfile.GoogleAsJson(i.DownloadFileName)
+			json := jsonObj.(ipfile.GoogleCloudFile)
+			fmt.Printf("Found %v Cidrs from %s\n", len(json.Prefixes), i.Cloudplatform)
 			for _, val := range json.Prefixes {
 				var cidr string
 				if len(val.Ipv4Prefix) > 0 {
@@ -87,10 +88,10 @@ func main() {
 
 			c := models.CidrObject{
 				Net:           cidr,
-				Start_ip:      processedCidr.netIPDecimal,
-				End_ip:        processedCidr.bcastIPDecimal,
-				Url:           ipfile.Url,
-				Cloudplatform: ipfile.Cloudplatform,
+				Start_ip:      processedCidr.NetIPDecimal,
+				End_ip:        processedCidr.BcastIPDecimal,
+				Url:           i.Url,
+				Cloudplatform: i.Cloudplatform,
 				Iptype:        "IPv4",
 			}
 

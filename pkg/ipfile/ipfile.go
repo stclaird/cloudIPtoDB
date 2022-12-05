@@ -37,7 +37,7 @@ type Ipfile struct {
 
 func (i *Ipfile) Download() (err error) {
 
-	full_path := fmt.Sprintf("%s/%s", downloaddir , i.DownloadFileName)
+	full_path := fmt.Sprintf("%s/%s", downloaddir, i.DownloadFileName)
 	log.Printf("Downloading %s to %s", i.Url, full_path)
 	//Download the IP Address file
 	// Create the file
@@ -66,11 +66,11 @@ func (i *Ipfile) Download() (err error) {
 	return nil
 }
 
-func googleAsJson(DownloadFileName string) (fileOut GoogleCloudFile) {
+func GoogleAsJson(DownloadFileName string) (fileOut GoogleCloudFile) {
 	// Open downloaded file and return as json
 	jsonFile, err := os.Open(downloaddir + DownloadFileName)
 	if err != nil {
-		log.Println("Error" , err)
+		log.Println("Error", err)
 	}
 	defer jsonFile.Close()
 	byteValue, _ := ioutil.ReadAll(jsonFile)
@@ -79,12 +79,12 @@ func googleAsJson(DownloadFileName string) (fileOut GoogleCloudFile) {
 	return fileOut
 }
 
-func amazonAsJson(DownloadFileName string) (fileOut AmazonWebServicesFile) {
+func AmazonAsJson(DownloadFileName string) (fileOut AmazonWebServicesFile) {
 	// Open downloaded file and return as json
 
 	jsonFile, err := os.Open(downloaddir + DownloadFileName)
 	if err != nil {
-		log.Println("Error" , err)
+		log.Println("Error", err)
 	}
 	defer jsonFile.Close()
 	byteValue, _ := ioutil.ReadAll(jsonFile)
