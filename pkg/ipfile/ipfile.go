@@ -12,30 +12,13 @@ import (
 
 const downloaddir = "ipfiles/"
 
-type GoogleCloudFile struct {
-	SyncToken    string `json:"syncToken"`
-	CreationTime string `json:"creationTime"`
-	Prefixes     []struct {
-		Ipv4Prefix string `json:"ipv4Prefix,omitempty"`
-		Ipv6Prefix string `json:"ipv6Prefix,omitempty"`
-	} `json:"prefixes"`
-}
-
-type AmazonWebServicesFile struct {
-	SyncToken  string `json:"syncToken"`
-	CreateDate string `json:"createDate"`
-	Prefixes   []struct {
-		IPPrefix string `json:"ip_prefix"`
-	} `json:"prefixes"`
-}
-
-type Ipfile struct {
+type DownloadFile struct {
 	Url              string `json:"url"`
 	DownloadFileName string `json:"DownloadFileName"`
 	Cloudplatform    string `json:"Cloudplatform"`
 }
 
-func (i *Ipfile) Download() (err error) {
+func (i *DownloadFile) Download() (err error) {
 
 	full_path := fmt.Sprintf("%s/%s", downloaddir, i.DownloadFileName)
 	log.Printf("Downloading %s to %s", i.Url, full_path)
@@ -66,31 +49,9 @@ func (i *Ipfile) Download() (err error) {
 	return nil
 }
 
-func GoogleAsJson(DownloadFileName string) (fileOut GoogleCloudFile) {
-	// Open downloaded file and return as json
-	jsonFile, err := os.Open(downloaddir + DownloadFileName)
-	if err != nil {
-		log.Println("Error", err)
-	}
-	defer jsonFile.Close()
-	byteValue, _ := ioutil.ReadAll(jsonFile)
-	json.Unmarshal(byteValue, &fileOut)
-
-	return fileOut
-}
-
-func AmazonAsJson(DownloadFileName string) (fileOut AmazonWebServicesFile) {
-	// Open downloaded file and return as json
-
-	jsonFile, err := os.Open(downloaddir + DownloadFileName)
-	if err != nil {
-		log.Println("Error", err)
-	}
-	defer jsonFile.Close()
-	byteValue, _ := ioutil.ReadAll(jsonFile)
-	json.Unmarshal(byteValue, &fileOut)
-
-	return fileOut
+type Ipfile struct {
+	SyncToken    string `json:"syncToken"`
+	CreationTime string `json:"creationTime"`
 }
 
 func Str_in_slice(str string, slice []string) bool {
@@ -101,4 +62,16 @@ func Str_in_slice(str string, slice []string) bool {
 		}
 	}
 	return false
+}
+func AsJson[T any](DownloadFileName string) (fileOut T) {
+	// Open downloaded file and return as json
+	jsonFile, err := os.Open(downloaddir + DownloadFileName)
+	if err != nil {
+		log.Println("Error", err)
+	}
+	defer jsonFile.Close()
+	byteValue, _ := ioutil.ReadAll(jsonFile)
+	json.Unmarshal(byteValue, &fileOut)
+
+	return fileOut
 }

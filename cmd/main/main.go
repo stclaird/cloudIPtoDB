@@ -41,41 +41,28 @@ func setup() *sql.DB {
 func main() {
 
 	db := setup()
-
 	for _, i := range confObj.Ipfiles {
 
 		i.Download()
-
-		var jsonObj interface{}
 		var cidrs []string
 
-		if i.Cloudplatform == "aws" {
-			jsonObj = ipfile.AmazonAsJson(i.DownloadFileName)
-			json := jsonObj.(ipfile.AmazonWebServicesFile)
-			fmt.Printf("Found %v Cidrs from %s\n", len(json.Prefixes), i.Cloudplatform)
-			for _, val := range json.Prefixes {
-				exists := ipfile.Str_in_slice(val.IPPrefix, cidrs)
+		switch i.Cloudplatform {
+		case "aws":
+			jsonObj := ipfile.AsJson[ipfile.GoogleCloudFile](i.DownloadFileName)
+			for _, val := range jsonObj.Prefixes {
+				exists := ipfile.Str_in_slice(val.Ipv4Prefix, cidrs)
 				if exists == false {
-					cidrs = append(cidrs, val.IPPrefix)
+					cidrs = append(cidrs, val.Ipv4Prefix)
 				}
 			}
-		}
 
-		if i.Cloudplatform == "google" {
-			jsonObj = ipfile.GoogleAsJson(i.DownloadFileName)
-			json := jsonObj.(ipfile.GoogleCloudFile)
-			fmt.Printf("Found %v Cidrs from %s\n", len(json.Prefixes), i.Cloudplatform)
-			for _, val := range json.Prefixes {
-				var cidr string
-				if len(val.Ipv4Prefix) > 0 {
-					cidr = val.Ipv4Prefix
-					exists := ipfile.Str_in_slice(cidr, cidrs)
-
-					if exists == false {
-						cidrs = append(cidrs, cidr)
-					}
+		case "google":
+			jsonObj := ipfile.AsJson[ipfile.GoogleCloudFile](i.DownloadFileName)
+			for _, val := range jsonObj.Prefixes {
+				exists := ipfile.Str_in_slice(val.Ipv4Prefix, cidrs)
+				if exists == false {
+					cidrs = append(cidrs, val.Ipv4Prefix)
 				}
-
 			}
 		}
 
@@ -97,7 +84,6 @@ func main() {
 
 			models.AddCidr(db, c)
 		}
-
 	}
 
 }
