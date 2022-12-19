@@ -48,41 +48,41 @@ func main() {
 
 		switch i.Cloudplatform {
 		case "aws":
-			jsonObj := ipfile.AsJson[ipfile.GoogleCloudFile](i.DownloadFileName)
-			for _, val := range jsonObj.Prefixes {
-				exists := ipfile.Str_in_slice(val.Ipv4Prefix, cidrs)
-				if exists == false {
-					cidrs = append(cidrs, val.Ipv4Prefix)
-				}
-			}
-
+			jsonObj := ipfile.AsJson[ipfile.AmazonWebServicesFile](i.DownloadFileName)
+			cidrs = jsonObj.Process(cidrs)
 		case "google":
 			jsonObj := ipfile.AsJson[ipfile.GoogleCloudFile](i.DownloadFileName)
-			for _, val := range jsonObj.Prefixes {
-				exists := ipfile.Str_in_slice(val.Ipv4Prefix, cidrs)
-				if exists == false {
-					cidrs = append(cidrs, val.Ipv4Prefix)
-				}
-			}
+			cidrs = jsonObj.Process(cidrs)
+		case "azure":
+			jsonObj := ipfile.AsJson[ipfile.AzureFile](i.DownloadFileName)
+			cidrs = jsonObj.Process(cidrs)
+		case "digitalocean":
+			cidrsObj := ipfile.AsCSV(i.DownloadFileName, 0)
+			cidrs = cidrsObj.Process(cidrs)
 		}
 
 		for _, cidr := range cidrs {
 			processedCidr, err := ipnet.ProcessCidr(cidr)
-
+			fmt.Println(cidr)
 			if err != nil {
 				fmt.Println("Error: ", err)
 			}
 
-			c := models.CidrObject{
-				Net:           cidr,
-				Start_ip:      processedCidr.NetIPDecimal,
-				End_ip:        processedCidr.BcastIPDecimal,
-				Url:           i.Url,
-				Cloudplatform: i.Cloudplatform,
-				Iptype:        "IPv4",
+			if processedCidr.Iptype == "IPv4" {
+
+				c := models.CidrObject{
+					Net:           cidr,
+					Start_ip:      processedCidr.NetIPDecimal,
+					End_ip:        processedCidr.BcastIPDecimal,
+					Url:           i.Url,
+					Cloudplatform: i.Cloudplatform,
+					Iptype:        processedCidr.Iptype,
+				}
+
+				models.AddCidr(db, c)
+
 			}
 
-			models.AddCidr(db, c)
 		}
 	}
 

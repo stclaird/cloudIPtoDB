@@ -1,6 +1,7 @@
 package ipfile
 
 import (
+	"encoding/csv"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -49,9 +50,13 @@ func (i *DownloadFile) Download() (err error) {
 	return nil
 }
 
-type Ipfile struct {
+type IpfileJson struct {
 	SyncToken    string `json:"syncToken"`
 	CreationTime string `json:"creationTime"`
+}
+
+type IpfileCSV struct {
+	Prefixes []string
 }
 
 func Str_in_slice(str string, slice []string) bool {
@@ -74,4 +79,31 @@ func AsJson[T any](DownloadFileName string) (fileOut T) {
 	json.Unmarshal(byteValue, &fileOut)
 
 	return fileOut
+}
+
+func AsCSV(DownloadFileName string, column int) (ipfile IpfileCSV) {
+
+	var cidrs []string
+	csvfile, err := os.Open(downloaddir + DownloadFileName)
+	if err != nil {
+		log.Println("Error", err)
+	}
+
+	r := csv.NewReader(csvfile)
+	for {
+		// Read each record from csv
+		record, err := r.Read()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		cidrs = append(cidrs, record[column])
+	}
+
+	ipfile.Prefixes = cidrs
+
+	return ipfile
 }
