@@ -59,17 +59,21 @@ func main() {
 		case "digitalocean":
 			cidrsObj := ipfile.AsCSV(i.DownloadFileName, 0)
 			cidrs = cidrsObj.Process(cidrs)
+		case "cloudflare":
+			cidrsObj := ipfile.AsText(i.DownloadFileName)
+			cidrs = cidrsObj.Process(cidrs)
+		case "oracle":
+			jsonObj := ipfile.AsJson[ipfile.OracleFile](i.DownloadFileName)
+			cidrs = jsonObj.Process(cidrs)
 		}
 
 		for _, cidr := range cidrs {
-			processedCidr, err := ipnet.ProcessCidr(cidr)
-			fmt.Println(cidr)
+			processedCidr, err := ipnet.PrepareCidrforDB(cidr)
 			if err != nil {
 				fmt.Println("Error: ", err)
 			}
 
 			if processedCidr.Iptype == "IPv4" {
-
 				c := models.CidrObject{
 					Net:           cidr,
 					Start_ip:      processedCidr.NetIPDecimal,

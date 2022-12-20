@@ -19,7 +19,6 @@ type AzureFile struct {
 }
 
 func (a *AzureFile) Process(cidrs []string) []string {
-	//	fmt.Println(a.Values)
 	for _, val := range a.Values {
 		for _, cidr := range val.Properties.AddressPrefixes {
 			exists := Str_in_slice(cidr, cidrs)

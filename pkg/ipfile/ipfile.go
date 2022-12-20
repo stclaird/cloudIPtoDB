@@ -1,6 +1,7 @@
 package ipfile
 
 import (
+	"bufio"
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
@@ -9,6 +10,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"regexp"
 )
 
 const downloaddir = "ipfiles/"
@@ -59,6 +61,18 @@ type IpfileCSV struct {
 	Prefixes []string
 }
 
+type IpfileTXT struct {
+	Prefixes []string
+}
+
+func match_ip(pattern string) []string {
+	//match ip addresses from string pattern and return slice of ips as string
+	re := regexp.MustCompile(`\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}(?:/\d{1,2}|)`)
+	result := re.FindAllString(pattern, -1)
+
+	return result
+}
+
 func Str_in_slice(str string, slice []string) bool {
 	//find a string in slice return boolean
 	for _, val := range slice {
@@ -82,7 +96,7 @@ func AsJson[T any](DownloadFileName string) (fileOut T) {
 }
 
 func AsCSV(DownloadFileName string, column int) (ipfile IpfileCSV) {
-
+	// Open a CSV and retrieve CIDR
 	var cidrs []string
 	csvfile, err := os.Open(downloaddir + DownloadFileName)
 	if err != nil {
@@ -101,6 +115,31 @@ func AsCSV(DownloadFileName string, column int) (ipfile IpfileCSV) {
 		}
 
 		cidrs = append(cidrs, record[column])
+	}
+	ipfile.Prefixes = cidrs
+	return ipfile
+}
+
+func AsText(DownloadFileName string) (ipfile IpfileTXT) {
+	file, err := os.Open(downloaddir + DownloadFileName)
+	if err != nil {
+		log.Println("Error", err)
+	}
+	defer file.Close()
+
+	var cidrs []string
+	scanner := bufio.NewScanner(file)
+
+	for scanner.Scan() {
+		txt := scanner.Text()
+		matched := match_ip(txt)
+		for _, cidr := range matched {
+			cidrs = append(cidrs, cidr)
+		}
+	}
+
+	if err := scanner.Err(); err != nil {
+		log.Fatal(err)
 	}
 
 	ipfile.Prefixes = cidrs
