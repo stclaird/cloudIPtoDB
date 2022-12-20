@@ -1,4 +1,12 @@
-# cloudIPtoDB
+# Cloud IP to DB
+This project creates a SQLite database containing CIDR records from large Cloud Providers platforms. Currently we import IP CIDR networks from the following:
+
+- Amazon Web Services (AWS)
+- Google Cloud (GCP)
+- Digital Ocean (DO)
+- Microsoft Azure (Azure)
+- CloudFlare
+- Oracle Cloud
 
 
 # Querying the Database
