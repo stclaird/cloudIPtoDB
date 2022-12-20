@@ -22,10 +22,10 @@ go.work
 
 
 #App specific
-cmd/ipimporter/ipfiles/*.json
+cmd/main/ipfiles/*.json
 
-cmd/ipimporter/ipfiles/
-cmd/ipimporter/output
+cmd/main/ipfiles/
+cmd/main/output
 
 ._.DS_Store
 .DS_Store
