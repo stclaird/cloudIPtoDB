@@ -30,6 +30,6 @@ SELECT cloudplatform, net
 FROM net 
 WHERE start_ip <= '2974273409'
 AND end_ip >= '2974273409';
-
-If this IP address is contained within one of the CIDR records this return the CIDR record, otherwise, if the IP address is not stored then the database will return no records.
 ```
+If this IP address is contained within one of the CIDR records this return the CIDR record, otherwise, if the IP address is not stored then the database will return no records.
+
