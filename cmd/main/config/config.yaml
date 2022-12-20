@@ -14,5 +14,11 @@ ipfiles:
   - cloudplatform: digitalocean
     url: https://digitalocean.com/geo/google.csv
     downloadfilename: "digitalocean.csv"
+  - cloudplatform: cloudflare
+    url: https://www.cloudflare.com/ips-v4
+    downloadfilename: cloudflare-ipv4.txt
+  - cloudplatform: oracle
+    url: https://docs.oracle.com/en-us/iaas/tools/public_ip_ranges.json
+    downloadfilename: oracle-public.json
 dbfile : cloudIP.sqlite3.db
 dbdir  : "output/"
