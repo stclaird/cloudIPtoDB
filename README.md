@@ -3,13 +3,13 @@
 
 # Querying Database
 
-1. Get the number of CIDR records held in total
+1. To get the total number of CIDR records held in the database:
 
 ```
 select count(*) from net;
 ```
 
-2. Get the number of CIDR records held in the database belong to the cloud platform AWS.
+2. To get the number of CIDR records held in the database belong to the cloud platform AWS.
 
 ```
 select count(*) from net where cloudplatform='aws';
