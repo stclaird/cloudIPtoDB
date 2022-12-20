@@ -1,7 +1,7 @@
 # cloudIPtoDB
 
 
-# Querying Database
+# Querying the Database
 
 1. To get the total number of CIDR records held in the database:
 
