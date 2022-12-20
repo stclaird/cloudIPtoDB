@@ -8,8 +8,31 @@ This project creates a SQLite database containing CIDR records from large Cloud 
 - CloudFlare
 - Oracle Cloud
 
+# Technology Stack
+
+The two core elements of this project are 
+ - A binary written in GoLang which creates the database object and populating it with data from the Cloud platform providers.
+ - A SQLite database file output containing the Cloud platform providers CIDR information.
+
+The SQLite database schema:
+
+```CREATE TABLE IF NOT EXISTS net (
+ 	net_id INTEGER PRIMARY KEY,
+ 	net TEXT NOT NULL,
+ 	start_ip INT NOT NULL,
+ 	end_ip INT NOT NULL,
+ 	url TEXT NOT NULL,
+ 	cloudplatform TEXT NOT NULL,
+ 	iptype TEXT NOT NULL
+ 	);
+ ```
+
+
+
+
 
 # Querying the Database
+The following section gives examples on how to query the database using SQL.
 
 1. To get the total number of CIDR records held in the database:
 
