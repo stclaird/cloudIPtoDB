@@ -14,7 +14,7 @@ The two core elements of this project are:
  - A binary written in GoLang which creates a SQLite database object and populates it with IP CIDR data from various Cloud platform providers.
  - A SQLite database file output containing the Cloud platform providers CIDR information.
 
-The SQLite database schema made up of a single 'net' table
+The SQLite database schema is made up of a single 'net' table
 
 ```CREATE TABLE IF NOT EXISTS net (
  	net_id INTEGER PRIMARY KEY,
@@ -30,7 +30,7 @@ The SQLite database schema made up of a single 'net' table
 # Querying the Database
 The following section gives examples on how to query the database using SQL.
 
-1. To get the total number of CIDR records held in the database:
+1. To get the total number of CIDR records across all cloud providers held in the database:
 
 ```
 select count(*) from net;
