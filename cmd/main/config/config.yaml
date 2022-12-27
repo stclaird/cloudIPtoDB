@@ -1,4 +1,7 @@
 ipfiles:
+  - cloudplatform: azure
+    url: https://download.microsoft.com/download/7/1/D/71D86715-5596-4529-9B13-DA13A5DE5B63/ServiceTags_Public_20221212.json
+    downloadfilename: "azure-public-cloud.json"
   - cloudplatform: google 
     url: https://www.gstatic.com/ipranges/cloud.json
     downloadfilename: "google-cloud.json"
@@ -8,5 +11,14 @@ ipfiles:
   - cloudplatform: aws 
     url: https://ip-ranges.amazonaws.com/ip-ranges.json
     downloadfilename: "aws-ips.json"
+  - cloudplatform: digitalocean
+    url: https://digitalocean.com/geo/google.csv
+    downloadfilename: "digitalocean.csv"
+  - cloudplatform: cloudflare
+    url: https://www.cloudflare.com/ips-v4
+    downloadfilename: cloudflare-ipv4.txt
+  - cloudplatform: oracle
+    url: https://docs.oracle.com/en-us/iaas/tools/public_ip_ranges.json
+    downloadfilename: oracle-public.json
 dbfile : cloudIP.sqlite3.db
 dbdir  : "output/"

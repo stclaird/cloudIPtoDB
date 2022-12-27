@@ -1,6 +1,8 @@
 package ipfile
 
 import (
+	"bufio"
+	"encoding/csv"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -8,34 +10,18 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"regexp"
 )
 
 const downloaddir = "ipfiles/"
 
-type GoogleCloudFile struct {
-	SyncToken    string `json:"syncToken"`
-	CreationTime string `json:"creationTime"`
-	Prefixes     []struct {
-		Ipv4Prefix string `json:"ipv4Prefix,omitempty"`
-		Ipv6Prefix string `json:"ipv6Prefix,omitempty"`
-	} `json:"prefixes"`
-}
-
-type AmazonWebServicesFile struct {
-	SyncToken  string `json:"syncToken"`
-	CreateDate string `json:"createDate"`
-	Prefixes   []struct {
-		IPPrefix string `json:"ip_prefix"`
-	} `json:"prefixes"`
-}
-
-type Ipfile struct {
+type DownloadFile struct {
 	Url              string `json:"url"`
 	DownloadFileName string `json:"DownloadFileName"`
 	Cloudplatform    string `json:"Cloudplatform"`
 }
 
-func (i *Ipfile) Download() (err error) {
+func (i *DownloadFile) Download() (err error) {
 
 	full_path := fmt.Sprintf("%s/%s", downloaddir, i.DownloadFileName)
 	log.Printf("Downloading %s to %s", i.Url, full_path)
@@ -66,31 +52,25 @@ func (i *Ipfile) Download() (err error) {
 	return nil
 }
 
-func GoogleAsJson(DownloadFileName string) (fileOut GoogleCloudFile) {
-	// Open downloaded file and return as json
-	jsonFile, err := os.Open(downloaddir + DownloadFileName)
-	if err != nil {
-		log.Println("Error", err)
-	}
-	defer jsonFile.Close()
-	byteValue, _ := ioutil.ReadAll(jsonFile)
-	json.Unmarshal(byteValue, &fileOut)
-
-	return fileOut
+type IpfileJson struct {
+	SyncToken    string `json:"syncToken"`
+	CreationTime string `json:"creationTime"`
 }
 
-func AmazonAsJson(DownloadFileName string) (fileOut AmazonWebServicesFile) {
-	// Open downloaded file and return as json
+type IpfileCSV struct {
+	Prefixes []string
+}
 
-	jsonFile, err := os.Open(downloaddir + DownloadFileName)
-	if err != nil {
-		log.Println("Error", err)
-	}
-	defer jsonFile.Close()
-	byteValue, _ := ioutil.ReadAll(jsonFile)
-	json.Unmarshal(byteValue, &fileOut)
+type IpfileTXT struct {
+	Prefixes []string
+}
 
-	return fileOut
+func match_ip(pattern string) []string {
+	//match ip addresses from string pattern and return slice of ips as string
+	re := regexp.MustCompile(`\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}(?:/\d{1,2}|)`)
+	result := re.FindAllString(pattern, -1)
+
+	return result
 }
 
 func Str_in_slice(str string, slice []string) bool {
@@ -101,4 +81,68 @@ func Str_in_slice(str string, slice []string) bool {
 		}
 	}
 	return false
+}
+func AsJson[T any](DownloadFileName string) (fileOut T) {
+	// Open downloaded file and return as json
+	jsonFile, err := os.Open(downloaddir + DownloadFileName)
+	if err != nil {
+		log.Println("Error", err)
+	}
+	defer jsonFile.Close()
+	byteValue, _ := ioutil.ReadAll(jsonFile)
+	json.Unmarshal(byteValue, &fileOut)
+
+	return fileOut
+}
+
+func AsCSV(DownloadFileName string, column int) (ipfile IpfileCSV) {
+	// Open a CSV and retrieve CIDR
+	var cidrs []string
+	csvfile, err := os.Open(downloaddir + DownloadFileName)
+	if err != nil {
+		log.Println("Error", err)
+	}
+
+	r := csv.NewReader(csvfile)
+	for {
+		// Read each record from csv
+		record, err := r.Read()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		cidrs = append(cidrs, record[column])
+	}
+	ipfile.Prefixes = cidrs
+	return ipfile
+}
+
+func AsText(DownloadFileName string) (ipfile IpfileTXT) {
+	file, err := os.Open(downloaddir + DownloadFileName)
+	if err != nil {
+		log.Println("Error", err)
+	}
+	defer file.Close()
+
+	var cidrs []string
+	scanner := bufio.NewScanner(file)
+
+	for scanner.Scan() {
+		txt := scanner.Text()
+		matched := match_ip(txt)
+		for _, cidr := range matched {
+			cidrs = append(cidrs, cidr)
+		}
+	}
+
+	if err := scanner.Err(); err != nil {
+		log.Fatal(err)
+	}
+
+	ipfile.Prefixes = cidrs
+
+	return ipfile
 }
