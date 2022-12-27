@@ -50,7 +50,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           body_path: ".github/RELEASE-TEMPLATE.md"
-          draft: true
+          draft: false
           files: |
             cmd/main/${{env.BINARY_NAME}}
             cmd/main/output/cloudIP.sqlite3.db
