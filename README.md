@@ -11,7 +11,7 @@ This project creates a SQLite database containing CIDR records from large Cloud 
 # Technology Stack
 
 The two core elements of this project are:
- - A binary written in GoLang which creates the database object and populates it with data from the Cloud platform providers.
+ - A binary written in GoLang which creates a SQLITE database object and populates it with IP CIDR data from various Cloud platform providers.
  - A SQLite database file output containing the Cloud platform providers CIDR information.
 
 The SQLite database schema:
