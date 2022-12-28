@@ -36,11 +36,11 @@ jobs:
           echo "BINARY_NAME=$BINARY_NAME" >> $GITHUB_ENV
           echo "GOOS=$GOOS" >> $GITHUB_ENV
           echo "GOARCH=$GOARCH" >> $GITHUB_ENV
-      - name: Build
+      - name: Testing
         run: |
           cd pkg/ipfile/
           go test -v .
-          cd pkg/ipnet/
+          cd ../ipnet/
           go test -v .
 
   release:
