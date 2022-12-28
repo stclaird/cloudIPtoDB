@@ -34,4 +34,3 @@ func TestStrInSlice(t *testing.T) {
 	}
 }
 
-func Test
