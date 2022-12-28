@@ -9,7 +9,7 @@ type GoogleCloudFile struct {
 
 func (g *GoogleCloudFile) Process(cidrs []string) []string {
 	for _, val := range g.Prefixes {
-		exists := Str_in_slice(val.Ipv4Prefix, cidrs)
+		exists := StrInSlice(val.Ipv4Prefix, cidrs)
 		if exists == false {
 			cidrs = append(cidrs, val.Ipv4Prefix)
 		}

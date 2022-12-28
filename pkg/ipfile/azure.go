@@ -21,7 +21,7 @@ type AzureFile struct {
 func (a *AzureFile) Process(cidrs []string) []string {
 	for _, val := range a.Values {
 		for _, cidr := range val.Properties.AddressPrefixes {
-			exists := Str_in_slice(cidr, cidrs)
+			exists := StrInSlice(cidr, cidrs)
 			if exists == false {
 				cidrs = append(cidrs, cidr)
 			}

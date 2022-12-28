@@ -65,7 +65,7 @@ type IpfileTXT struct {
 	Prefixes []string
 }
 
-func match_ip(pattern string) []string {
+func MatchIp(pattern string) []string {
 	//match ip addresses from string pattern and return slice of ips as string
 	re := regexp.MustCompile(`\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}(?:/\d{1,2}|)`)
 	result := re.FindAllString(pattern, -1)
@@ -73,7 +73,7 @@ func match_ip(pattern string) []string {
 	return result
 }
 
-func Str_in_slice(str string, slice []string) bool {
+func StrInSlice(str string, slice []string) bool {
 	//find a string in slice return boolean
 	for _, val := range slice {
 		if val == str {
@@ -132,7 +132,7 @@ func AsText(DownloadFileName string) (ipfile IpfileTXT) {
 
 	for scanner.Scan() {
 		txt := scanner.Text()
-		matched := match_ip(txt)
+		matched := MatchIp(txt)
 		for _, cidr := range matched {
 			cidrs = append(cidrs, cidr)
 		}

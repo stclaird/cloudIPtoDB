@@ -10,7 +10,7 @@ type AmazonWebServicesFile struct {
 func (a *AmazonWebServicesFile) Process(cidrs []string) []string {
 
 	for _, val := range a.Prefixes {
-		exists := Str_in_slice(val.IPPrefix, cidrs)
+		exists := StrInSlice(val.IPPrefix, cidrs)
 		if exists == false {
 			cidrs = append(cidrs, val.IPPrefix)
 		}

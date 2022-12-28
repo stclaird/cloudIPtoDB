@@ -15,7 +15,7 @@ type OracleFile struct {
 func (a *OracleFile) Process(cidrs []string) []string {
 	for _, region := range a.Regions {
 		for _, cidr := range region.Cidrs {
-			exists := Str_in_slice(cidr.Cidr, cidrs)
+			exists := StrInSlice(cidr.Cidr, cidrs)
 			if exists == false {
 				cidrs = append(cidrs, cidr.Cidr)
 			}
