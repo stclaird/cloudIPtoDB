@@ -54,7 +54,7 @@ cd cloudIPtoDB/cmd/main
 ```
 Build the binary
 ```
-go build . -o cloudiptodb
+go build -o cloudiptodb main.go
 ```
 
 # Querying the Database
