@@ -71,7 +71,7 @@ sqlite3 output/cloudIP.sqlite3.db
 ```
 
 # Querying the Database
-The following section gives examples on how to query the database using SQL.
+The following section gives examples on how to query the database using SQL statements.
 
 1. To get the total number of CIDR records across all cloud providers held in the database:
 
