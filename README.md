@@ -73,13 +73,13 @@ sqlite3 output/cloudIP.sqlite3.db
 # Querying the Database
 The following section gives examples on how to query the database using SQL statements.
 
-1. To get the total number of CIDR records across all cloud providers held in the database:
+### 1. To get the total number of CIDR records across all cloud providers held in the database:
 
 ```
 select count(*) from net;
 ```
 
-2. To get the number of CIDR records held in the database belong to the cloud platform AWS.
+### 2. To get the number of CIDR records held in the database belong to the cloud platform AWS.
 
 ```
 select count(*) from net where cloudplatform='aws';
@@ -88,6 +88,12 @@ select count(*) from net where cloudplatform='aws';
 or from cloudflare
 ```
 cloudplatformsqlite> select * from net where cloudplatform='cloudflare';
+```
+```
+sqlite> select * from net where cloudplatform='cloudflare';
+1729491968|103.21.244.0/22|1729491968|1729492991|https://www.cloudflare.com/ips-v4|cloudflare|IPv4
+<SNIP>
+sqlite> 
 ```
 
 3. Find if a specific IP address exists in one of the cidrs held in the database.
@@ -109,13 +115,9 @@ AND end_ip >= '2974273409';
 ```
 If this IP address is contained within one of the CIDR records this return the CIDR record, otherwise, if the IP address is not stored then the database will return no records.
 
-For example,
+For example:
+```aws|177.71.128.0/17
+aws|177.71.207.128/26
 ```
-sqlite> select * from net where cloudplatform='cloudflare';
-1729491968|103.21.244.0/22|1729491968|1729492991|https://www.cloudflare.com/ips-v4|cloudflare|IPv4
-1729546240|103.22.200.0/22|1729546240|1729547263|https://www.cloudflare.com/ips-v4|cloudflare|IPv4
-1730085888|103.31.4.0/22|1730085888|1730086911|https://www.cloudflare.com/ips-v4|cloudflare|IPv4
-<SNIP>
-sqlite> 
-```
+
 
