@@ -28,6 +28,18 @@ The SQLite database schema is made up of a single 'net' table
  ```
 # Installing the Database
 
+## Method 1
+The easiest method, simply download the cloudIP.sqlite3.db file from the releases section.
+
+https://github.com/stclaird/cloudIPtoDB/releases/latest
+
+Then from the command prompt run the sqlite 
+
+```
+sqlite3 cloudIP.sqlite3.db
+```
+
+## Method 2
 
 # Querying the Database
 The following section gives examples on how to query the database using SQL.
