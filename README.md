@@ -33,7 +33,7 @@ The easiest method, simply download the cloudIP.sqlite3.db file from the release
 
 https://github.com/stclaird/cloudIPtoDB/releases/latest
 
-Then from the command prompt run the sqlite 
+Then from the command prompt run the sqlite commad and specify the newly download file path.
 
 ```
 sqlite3 cloudIP.sqlite3.db
