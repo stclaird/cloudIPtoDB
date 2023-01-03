@@ -99,7 +99,7 @@ To remedy this and allow for the querying of individual IP addresses we also sto
 One thing though, for this to work you do need to convert your IP address to an integer before running a query. 
 For example, if you want to know if the IP address `177.71.207.129` is within one of the CIDR records stored in the database:
 
-Firstly you need to convert this IPv4 address to a decimal integer, which is 2974273409 and then perform the following query:
+Firstly, you need to convert this IPv4 address to a decimal integer, which is 2974273409. Once you have the IP as an integer and then perform the following query:
 
 ```
 SELECT cloudplatform, net 
@@ -108,4 +108,14 @@ WHERE start_ip <= '2974273409'
 AND end_ip >= '2974273409';
 ```
 If this IP address is contained within one of the CIDR records this return the CIDR record, otherwise, if the IP address is not stored then the database will return no records.
+
+For example,
+```
+sqlite> select * from net where cloudplatform='cloudflare';
+1729491968|103.21.244.0/22|1729491968|1729492991|https://www.cloudflare.com/ips-v4|cloudflare|IPv4
+1729546240|103.22.200.0/22|1729546240|1729547263|https://www.cloudflare.com/ips-v4|cloudflare|IPv4
+1730085888|103.31.4.0/22|1730085888|1730086911|https://www.cloudflare.com/ips-v4|cloudflare|IPv4
+<SNIP>
+sqlite> 
+```
 
