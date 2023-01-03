@@ -57,6 +57,19 @@ Build the binary
 go build -o cloudiptodb main.go
 ```
 
+Run the binary
+```
+chmod +x cloudiptodb
+./cloudiptodb
+```
+
+This will produce a database file in the directory output
+You can run this in the same way as method 1 above
+
+```
+sqlite3 output/cloudIP.sqlite3.db
+```
+
 # Querying the Database
 The following section gives examples on how to query the database using SQL.
 
