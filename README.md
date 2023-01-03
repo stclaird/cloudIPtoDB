@@ -113,11 +113,12 @@ FROM net
 WHERE start_ip <= '2974273409'
 AND end_ip >= '2974273409';
 ```
-If this IP address is contained within one of the CIDR records this return the CIDR record, otherwise, if the IP address is not stored then the database will return no records.
+If this IP address is contained within one of the CIDR records this return the CIDR record,
 
-For example:
-```aws|177.71.128.0/17
+```
+aws|177.71.128.0/17
 aws|177.71.207.128/26
 ```
+otherwise, if the IP address is not stored then the database will return no records.
 
 
