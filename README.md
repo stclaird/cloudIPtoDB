@@ -43,6 +43,12 @@ select count(*) from net;
 ```
 select count(*) from net where cloudplatform='aws';
 ```
+
+or from cloudflare
+```
+cloudplatformsqlite> select * from net where cloudplatform='cloudflare';
+```
+
 3. Find if a specific IP address exists in one of the cidrs held in the database.
 
 The records in the database are in CIDR network format, and not unpacked into individual IP addresses. Not having individual IP addresses stored as records will make querying for IPs using SQL difficult.
