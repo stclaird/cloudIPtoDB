@@ -26,20 +26,36 @@ The SQLite database schema is made up of a single 'net' table
  	iptype TEXT NOT NULL
  	);
  ```
-# Installing the Database
+# Use the database for local querying
+
+These instructions describe how to use the sqlite file on your workstation for local querying
 
 ## Method 1
-The easiest method, simply download the cloudIP.sqlite3.db file from the releases section.
+The easiest method, simply download the latest cloudIP.sqlite3.db file from the releases section.
 
 https://github.com/stclaird/cloudIPtoDB/releases/latest
 
-Then from the command prompt run the sqlite commad and specify the newly download file path.
+Then from the command prompt run the sqlite command and specify the newly download file path.
 
 ```
 sqlite3 cloudIP.sqlite3.db
 ```
 
 ## Method 2
+Use this version to build the binary and create the sqllite database file with the latest cloud provider CIDR information.  This method is slightly more complex but produces the most up to date database file.
+
+Check out this repository
+```
+git clone git@github.com:stclaird/cloudIPtoDB.git
+```
+Change directory to the cmd folder
+```
+cd cloudIPtoDB/cmd/main
+```
+Build the binary
+```
+go build . -o cloudiptodb
+```
 
 # Querying the Database
 The following section gives examples on how to query the database using SQL.
