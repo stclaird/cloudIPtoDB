@@ -64,7 +64,7 @@ chmod +x cloudiptodb
 ```
 
 This will produce a database file in the directory output
-You can run this in the same way as method 1 above
+You can run this simply with the following command
 
 ```
 sqlite3 output/cloudIP.sqlite3.db
