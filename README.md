@@ -26,7 +26,8 @@ The SQLite database schema is made up of a single 'net' table
  	iptype TEXT NOT NULL
  	);
  ```
-# Intalling the Database
+# Installing the Database
+
 
 # Querying the Database
 The following section gives examples on how to query the database using SQL.
