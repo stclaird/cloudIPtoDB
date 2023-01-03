@@ -107,7 +107,7 @@ To remedy this and allow for the querying of individual IP addresses we also sto
 One thing though, for this to work you do need to convert your IP address to an integer before running a query. 
 For example, if you want to know if the IP address `177.71.207.129` is within one of the CIDR records stored in the database:
 
-Firstly, you need to convert this IPv4 address to a decimal integer, which is 2974273409. Once you have the IP as an integer and then perform the following query:
+Firstly, you need to convert this IPv4 address to a decimal integer, which is 2974273409. Once you have the IP as an integer you can then perform the following query, where the value fro the start_ip and end_ip columns are this integer:
 
 ```
 SELECT cloudplatform, net 
